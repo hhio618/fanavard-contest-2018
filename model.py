@@ -52,7 +52,7 @@ def run(item ,n_epochs, lr):
     n_features = 1
     X_train = reshape_2d(np.c_[X1_train, X2_train])
     X_test = reshape_2d(np.c_[X1_test, X2_test])
-    model = DenseModel(item, base_blocks=[price_model, vol_model], layers=[100, 50],
+    model = DenseModel(item, base_blocks=[price_model, vol_model], layers=[100,50],
                        scaler=scaler1,
                        n_lags=n_lags,
                        n_features=n_features)
