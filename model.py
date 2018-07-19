@@ -8,8 +8,7 @@ import numpy as np
 def reshape_2d(X):
     return X.reshape((X.shape[0],X.shape[2]))
 
-def run(item):
-    n_epochs = 500
+def run(n_epochs, item):
     # Train the price model
     print("Start traning base block for price...")
     n_lags = 1
