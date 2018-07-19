@@ -1,46 +1,22 @@
-from keras.models import load_model
-from sklearn.externals import joblib
-import numpy as np
+from base.price_model import PriceModel
+from data import data
+import sys
 
 
-models = []
-scalers = []
-
-model_names = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
-
-models_dir = 'models'
-scalers_dir = 'scalers'
-
-for name in model_names:
-    models.append(load_model(models_dir + '/' + name + '.model'))
-    scalers.append(joblib.load(scalers_dir + '/' + name + '.scaler'))
-
-
-lines = int(input())
-
-indexes = [[12], [651], [1290], [1929], [2568], [3207], [3846], [4485], [5124]]
-
-for i in range(119):
-    for j in range(len(indexes)):
-        indexes[j].append(indexes[j][-1] + 4)
-
-for i in range(lines):
-    data = input().strip().split()
-    input_data = []
-
-    for j in range(len(indexes)):
-        jdata = [int(data[x]) for x in indexes[j]]
-        input_data.append(float(sum(jdata)/len(jdata)))
-
-    for j in range(len(models)):
-        scaled = scalers[j].transform(np.concatenate(([input_data[j]], [1])).reshape((1,2)))
-        m_input = scaled[0,0].reshape((1,1,1))
-        for k in range(10):
-            m_input = models[j].predict(m_input.reshape((1,1,1)))
-            inversed = scalers[j].inverse_transform(np.concatenate((m_input[0], [1])).reshape((1,2)))
-            print(str(inversed[0,1]) + ' ', end='')
-    print()
-    
-
-
-
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print("Usage: main.py <item>\r\nItems are A,B,...")
+        sys.exit(0)
+    item = sys.argv[1]
+    n_lags = 1
+    n_features = 1
+    X_train, y_train, X_test, y_test, scaler = data.prepare_data(item=item, n_lags=n_lags,
+                                                                 n_features=n_features)
+    model = PriceModel(item, input_shape=X_train.shape[1:],
+                       scaler=scaler,
+                       n_cells=50,
+                       n_lags=n_lags,
+                       n_features=n_features)
+    model.train(X_train, y_train, lr=0.0003,
+                validation_split=0.1, n_epochs=500, batch_size=120)
+    model.predict(X_test, y_test)
