@@ -17,6 +17,6 @@ if __name__ == '__main__':
                        n_cells=50,
                        n_lags=n_lags,
                        n_features=n_features)
-    model.train(X_train, y_train, lr=0.0003,
+    model.train(X_train, y_train, lr=0.003,
                 validation_split=0.1, n_epochs=500, batch_size=120)
     model.predict(X_test, y_test)

@@ -17,7 +17,7 @@ from keras.activations import elu, relu
 from scipy.ndimage.interpolation import shift
 
 import matplotlib
-gui_env = ['TKAgg', 'GTKAgg', 'Qt4Agg', 'WXAgg']
+gui_env = ['Agg', 'TKAgg', 'GTKAgg', 'Qt4Agg', 'WXAgg']
 for gui in gui_env:
     try:
         print "Testing matplotlib backend...", gui
