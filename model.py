@@ -8,7 +8,7 @@ import numpy as np
 def reshape_2d(X):
     return X.reshape((X.shape[0],X.shape[2]))
 
-def run(n_epochs, item):
+def run(item ,n_epochs, lr):
     # Train the price model
     print("Start traning base block for price...")
     n_lags = 1
@@ -23,7 +23,7 @@ def run(n_epochs, item):
                             n_cells=50,
                             n_lags=n_lags,
                             n_features=n_features)
-    price_model.train(X1_train, y1_train, lr=0.0003,
+    price_model.train(X1_train, y1_train, lr=lr,
                       validation_split=0.1, n_epochs=n_epochs, batch_size=120)
     price_model.predict(X1_test, y1_test)
     print("Base block for price ready!")
@@ -42,7 +42,7 @@ def run(n_epochs, item):
                           n_lags=n_lags,
                           n_features=n_features)
 
-    vol_model.train(X2_train, y2_train, lr=0.0003,
+    vol_model.train(X2_train, y2_train, lr=lr,
                     validation_split=0.1, n_epochs=n_epochs, batch_size=120)
     vol_model.predict(X2_test, y2_test)
     print("Base block for vol ready!")
@@ -57,7 +57,7 @@ def run(n_epochs, item):
                        n_lags=n_lags,
                        n_features=n_features)
 
-    model.train(X_train, y1_train, lr=0.0003,
+    model.train(X_train, y1_train, lr=lr,
                 validation_split=0.1, n_epochs=n_epochs, batch_size=120)
     print("Training finished!")
     model.predict(X_test, y1_test)

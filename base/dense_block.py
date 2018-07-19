@@ -123,7 +123,7 @@ class DenseModel(object):
         print('Test r2:  %.3f' % r2)
         print('Test pi:  %.3f' % pi)
 
-        pyplot.figure(5)
+        pyplot.figure()
         pyplot.plot(inv_y, color='black', label='Original data')
         pyplot.plot(inv_yhat, color='blue', label='Predicted data')
         pyplot.legend(loc='best')

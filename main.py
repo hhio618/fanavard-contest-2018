@@ -2,12 +2,12 @@ from model import run
 import sys
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print("Usage: main.py <n_epochs> <item|all>\r\nItems are A,B,...")
+    if len(sys.argv) < 4:
+        print("Usage: main.py <item|all> <n_epochs> <lr>\r\nItems are A,B,...")
         sys.exit(0)
-    if sys.argv[2] == 'all':
+    if sys.argv[1] == 'all':
         for item in 'ABCDEFGHI':
             print("Item(%s) ################################################"% item)
-            run(int(sys.argv[1]), item)
+            run(item , int(sys.argv[2]), float(sys.argv[3]) )
     else:
-        run(int(sys.argv[1]), sys.argv[2])
+        run(sys.argv[1] , int(sys.argv[2]), float(sys.argv[3]) )
