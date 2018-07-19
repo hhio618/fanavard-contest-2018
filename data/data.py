@@ -63,7 +63,7 @@ def prepare_data(item='A', feature='price', n_features=1, n_lags=1 ,train_perent
         data_path = 'data/csv/%s_mean.csv' % item
         df = pd.read_csv(data_path, date_parser=parser,
                          parse_dates=['date'], index_col=0)
-        df['price'] = remove_outliers(df[feature])
+        df[feature] = remove_outliers(df[feature])
         sale_df = df[[feature]]
         lagged_sale_df = series_to_supervised(sale_df, n_lags, 1)
 
