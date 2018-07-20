@@ -71,7 +71,7 @@ class ComplexModel(object):
         model.add(LeakyReLU())
 
         optm = RMSprop(lr=lr)
-        model.compile(loss='mse', optimizer=optm)
+        model.compile(loss='mse', optimizer='adam')
         return model
 
     def _train(self, model, X_train, y_train, validation_split, n_epochs, batch_size):
