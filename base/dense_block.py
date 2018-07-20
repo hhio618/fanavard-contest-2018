@@ -20,7 +20,7 @@ import matplotlib
 gui_env = ['Agg', 'TKAgg', 'GTKAgg', 'Qt4Agg', 'WXAgg']
 for gui in gui_env:
     try:
-        print "Testing matplotlib backend...", gui
+        print("Testing matplotlib backend...", gui)
         matplotlib.use(gui, warn=False, force=True)
         matplotlib.interactive(False)
         from matplotlib import pyplot
