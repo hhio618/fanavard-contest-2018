@@ -101,9 +101,12 @@ class ComplexModel(object):
     def predict_only(self, X_test):
         return self.model.predict(X_test)
 
-    def predict(self, X_test, y_test):
+    def predict(self, X_in, y_test):
         # make a prediction
-        yhat = self.predict_only(X_test)
+        X_in_ = self._prepare_data(X_in)
+        yhat = self.model.predict(X_in_)
+        # X_test for forecasting
+        X_test = X_in[:,0]
         X_test = X_test.reshape(
             (X_test.shape[0], self.n_lags * self.n_features))
         # invert scaling for forecast

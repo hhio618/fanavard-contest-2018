@@ -33,8 +33,8 @@ def run(item ,n_epochs, lr):
                                                                       feature=feature,
                                                                       n_lags=n_lags,
                                                                       n_features=n_features)
-    X_train = np.c_[X1_train, X2_train,X3_train,X4_train]
-    X_test = np.c_[X1_test, X2_test, X3_test, X4_test]
+    X_train = np.c_[X1_train,X3_train,X4_train]
+    X_test = np.c_[X1_test, X3_test, X4_test]
     model = ComplexModel(item, input_shape=X_train[0].shape,
                             scaler=scaler1,
                             n_cells=50,
