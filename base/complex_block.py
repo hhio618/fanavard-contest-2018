@@ -103,8 +103,7 @@ class ComplexModel(object):
 
     def predict(self, X_in, y_test):
         # make a prediction
-        X_in_ = self._prepare_data(X_in)
-        yhat = self.model.predict(X_in_)
+        yhat = self.model.predict(X_in)
         # X_test for forecasting
         X_test = X_in[:,0]
         X_test = X_test.reshape(
