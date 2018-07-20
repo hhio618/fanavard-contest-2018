@@ -1,0 +1,5 @@
+Test RMSE: 0.743
+Test mae:  0.492
+Test rmae:  0.701
+Test r2:  0.980
+Test pi:  0.934
