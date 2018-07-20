@@ -64,9 +64,9 @@ class ComplexModel(object):
         # design network
         model = Sequential()
         model.add(LSTM(self.n_cells, input_shape=self.input_shape))
-        model.add(Dropout(0.5))
-        model.add(Dense(units=50,activation='relu'))
-        model.add(Dropout(0.5))
+        # model.add(Dropout(0.5))
+        # model.add(Dense(units=50,activation='relu'))
+        # model.add(Dropout(0.5))
         model.add(Dense(1, activation="relu"))
 
         optm = RMSprop(lr=lr)
