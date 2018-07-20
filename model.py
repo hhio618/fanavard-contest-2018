@@ -21,7 +21,7 @@ def run(item, n_epochs, lr):
     Xhat = X_train[:200,:50]
     yhat = y_train[:200]
     X_t = X_test[:,:50]
-    y_t = y_test[]
+    y_t = y_test
 
     scaler = joblib.load("data/scalers/%s.scaler" % item)
     model = ComplexModel(item, input_shape=Xhat.shape[1:],output_size=output_size,
