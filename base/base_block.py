@@ -10,7 +10,7 @@ from pandas import DataFrame, concat
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.externals import joblib
-from keras.optimizers import RMSprop
+from keras.optimizers import RMSprop,SGD,Adam
 import keras
 from keras import backend as K
 from keras.activations import elu, relu
@@ -52,9 +52,10 @@ class BaseModel(object):
         # design network
         model = Sequential()
         model.add(LSTM(self.n_cells, input_shape=(self.input_shape)))
+#        model.add(Dropout(0.5))
         model.add(Dense(1, activation=relu))
 
-        optm = RMSprop(lr=lr)
+        optm = Adam(lr=lr)
         model.compile(loss='mse', optimizer=optm)
         return model
 

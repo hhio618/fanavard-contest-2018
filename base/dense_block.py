@@ -10,7 +10,7 @@ from pandas import DataFrame, concat
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.externals import joblib
-from keras.optimizers import RMSprop
+from keras.optimizers import RMSprop,Adam
 import keras
 from keras import backend as K
 from keras.activations import elu, relu
@@ -54,8 +54,9 @@ class DenseModel(object):
         model.add(Dense(units=self.layers[0],activation=relu, input_shape=self.input_shape))
         for layer in self.layers[1:]:
             model.add(Dense(units=layer,activation=relu))
+#            model.add(Dropout(0.5))
         model.add(Dense(1, activation=relu))
-        optm = RMSprop(lr=lr)
+        optm = Adam(lr=lr)
         model.compile(loss='mse', optimizer=optm)
         return model
 
