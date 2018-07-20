@@ -66,12 +66,12 @@ class ComplexModel(object):
         model = Sequential()
 
         model.add(LSTM(self.n_cells,activation='tanh', input_shape=self.input_shape,return_sequences=False))
-        # model.add(Dropout(0.8))
+        model.add(Dropout(0.8))
         model.add(Dense(self.output_size))
-        # model.add(LeakyReLU())
+        model.add(LeakyReLU())
 
-        optm = RMSprop(lr=lr)
-        model.compile(loss='mse', optimizer='adam')
+        optm = Adam(lr=lr)
+        model.compile(loss='mse', optimizer=optm)
         return model
 
     def _train(self, model, X_train, y_train, validation_split, n_epochs, batch_size):
