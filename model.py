@@ -18,7 +18,7 @@ def run(item, n_epochs, lr):
     X_train, y_train, X_test, y_test = data.prepare_data_new(item=item,
                                                              n_lags=n_lags,
                                                              n_features=n_features)
-    n_lags = 50
+    n_lags = 20
     Xhat = X_train[:,:n_lags]
     yhat = y_train
     X_t = X_test[:,:n_lags]
