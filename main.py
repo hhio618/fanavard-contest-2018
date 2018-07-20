@@ -6,7 +6,7 @@ from data import data
 
 
 def x_from_input():
-    x = np.asarray(sys.argv[2],sys.argv[4],sys.argv[6])
+    x = np.asarray(sys.argv[2],sys.argv[4],sys.argv[6],sys.argv[8], sys.argv[9])
     return x
 
 
@@ -16,7 +16,7 @@ if __name__ == '__main__':
         sys.exit(0)
     item = sys.argv[1]
     model = keras.models.load_model("output/models/%s.model" % item)
-    n_lags = 256
+    n_lags = 50
     n_features = 5
     print("Start traning base block for prediction...")
     _, _, X_test, _, scaler = data.prepare_data_new(item=item,

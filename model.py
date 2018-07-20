@@ -11,8 +11,8 @@ def reshape_2d(X):
 
 def run(item, n_epochs, lr):
     # Train the price model
-    n_lags = 256
-    n_features = 3
+    n_lags = 50
+    n_features = 5
     output_size = 10
     print("Start traning base block for prediction...")
     X_train, y_train, X_test, y_test = data.prepare_data_new(item=item,
