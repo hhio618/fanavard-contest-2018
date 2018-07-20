@@ -7,7 +7,7 @@ if __name__ == '__main__':
         sys.exit(0)
     if sys.argv[1] == 'all':
         for item in 'ABCDEFGHI':
-            print("Item(%s) ################################################"% item)
-            run(item , int(sys.argv[2]), float(sys.argv[3]) )
+            print("Item(%s) ################################################" % item)
+            run(item, int(sys.argv[2]), float(sys.argv[3]))
     else:
-        run(sys.argv[1] , int(sys.argv[2]), float(sys.argv[3]) )
+        run(sys.argv[1], int(sys.argv[2]), float(sys.argv[3]))

@@ -46,9 +46,8 @@ def parser2(x):
 
 
 def prepare_data_new(item='A', n_features=1, n_lags=1, train_perent=0.9):
-        data_path = 'data/csv/%s.csv' % item
-        df = pd.read_csv(data_path, date_parser=parser,
-                         parse_dates=['date'], index_col=0)
+        data_path = 'data/csv/%s.csv.gz' % item
+        df = pd.read_csv(data_path, index_col=0, compression='gzip')
 
         data = np.array(df)
 
@@ -65,4 +64,4 @@ def prepare_data_new(item='A', n_features=1, n_lags=1, train_perent=0.9):
         y_test = d_test[:, -10:]
         X_train = X_train.reshape((X_train.shape[0], n_lags, n_features))
         X_test = X_test.reshape((X_test.shape[0], n_lags, n_features))
-        return X_train, y_train, X_test, y_test, scaler
+        return X_train, y_train, X_test, y_test

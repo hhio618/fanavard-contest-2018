@@ -3,7 +3,7 @@ import datetime
 from math import sqrt
 import numpy as np
 import pandas as pd
-from keras.layers import LSTM, Dense, Dropout
+from keras.layers import LSTM, Dense, Dropout,LeakyReLU
 from keras.models import Sequential
 from numpy import concatenate
 from pandas import DataFrame, concat
@@ -43,7 +43,7 @@ def pi_score(y_true, y_pred):
 
 
 class ComplexModel(object):
-    def __init__(self, item, input_shape, scaler, n_cells, n_lags,
+    def __init__(self, item, input_shape,output_size, scaler, n_cells, n_lags,
                  n_features):
         # model seeding ########################################################
         seed = hash(item) & 0xffffffff
@@ -54,6 +54,7 @@ class ComplexModel(object):
         ########################################################################
 
         self.input_shape = input_shape
+        self.output_size = output_size
         self.scaler = scaler
         self.item = item
         self.n_cells = n_cells
@@ -66,7 +67,7 @@ class ComplexModel(object):
 
         model.add(LSTM(self.n_cells,activation='tanh', input_shape=self.input_shape,return_sequences=False))
         model.add(Dropout(0.8))
-        model.add(Dense(1))
+        model.add(Dense(self.output_size))
         model.add(LeakyReLU())
 
         optm = RMSprop(lr=lr)
@@ -97,8 +98,6 @@ class ComplexModel(object):
         pyplot.title('errors during training')
         pyplot.legend()
         pyplot.savefig("output/figures/%s_loss.png" % self.item)
-
-    def predict_only(self, X_test):
 
     def predict(self, X_test, y_test):
         # make a prediction
