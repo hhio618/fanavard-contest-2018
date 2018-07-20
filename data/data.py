@@ -47,10 +47,10 @@ def parser2(x):
 
 def prepare_data_new(item='A', n_features=1, n_lags=1, train_perent=0.9):
         data_path = 'data/csv/%s.csv.gz' % item
-        df = pd.read_csv(data_path, index_col=0, compression='gzip')
+        df = pd.read_csv(data_path, compression='gzip')
 
         data = np.array(df)
-
+        print(data.shape)
         trains_size = int(data.shape[0]*train_perent)
         d_train = data[:trains_size, :]
         # scaler = scaler.fit(d_train)
