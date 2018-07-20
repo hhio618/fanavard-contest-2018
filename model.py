@@ -18,8 +18,8 @@ def run(item, n_epochs, lr):
     X_train, y_train, X_test, y_test = data.prepare_data_new(item=item,
                                                              n_lags=n_lags,
                                                              n_features=n_features)
-    Xhat = X_train[:,:50,:100]
-    yhat = y_train[:,:100]
+    Xhat = X_train[:200,:50]
+    yhat = y_train[:200]
 
     scaler = joblib.load("data/scalers/%s.scaler" % item)
     model = ComplexModel(item, input_shape=Xhat.shape[1:],output_size=output_size,
