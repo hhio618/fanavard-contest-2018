@@ -84,9 +84,15 @@ class ComplexModel(object):
 
     def train(self, X_train, y_train, lr=0.0003, validation_split=0.1, n_epochs=500, batch_size=120):
         _model = self._build_model(lr)
-        print("Training a new model...")
-        self.model = self._train(_model,  X_train, y_train,
-                                 validation_split, n_epochs, batch_size)
+        try:
+            print("Try load model from cache...")
+            self.model = keras.models.load_model('output/models/%s.model' % self.item)
+            print("Model loaded")
+        except Exception as e:
+            print("Training a new model...")
+            self.model = self._train(_model,  X_train, y_train,
+                        validation_split, n_epochs, batch_size)
+
         return self
 
     def plot_history(self):
@@ -103,17 +109,10 @@ class ComplexModel(object):
         # make a prediction
         yhat = self.model.predict(X_test)
 
-        # X_test for forecasting
-        X_test = X_test.reshape((X_test.shape[0], self.n_lags * self.n_features))
-        # invert scaling for forecast
-        inv_yhat = concatenate((X_test, yhat), axis=1)
-        inv_yhat = self.scaler.inverse_transform(inv_yhat)
-        inv_yhat = inv_yhat[self.n_lags:, -1]
+        # # X_test for forecasting
+        inv_yhat = yhat.reshape((len(yhat), 1))
         # invert scaling for actual
-        y_test = y_test.reshape((len(y_test), 1))
-        inv_y = concatenate((X_test, y_test), axis=1)
-        inv_y = self.scaler.inverse_transform(inv_y)
-        inv_y = inv_y[:-self.n_lags, -1]
+        inv_y = y_test.reshape((len(y_test), 1))
         # calculate RMSE
         rmse = sqrt(mean_squared_error(inv_y, inv_yhat))
         mae = mean_absolute_error(inv_y, inv_yhat)
