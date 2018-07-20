@@ -15,8 +15,12 @@ import keras
 from keras import backend as K
 from keras.activations import elu, relu
 from scipy.ndimage.interpolation import shift
-
+import random as rn
 import matplotlib
+import os
+import math
+import sys
+from keras import backend as K
 gui_env = ['Agg', 'TKAgg', 'GTKAgg', 'Qt4Agg', 'WXAgg']
 for gui in gui_env:
     try:
@@ -28,6 +32,7 @@ for gui in gui_env:
         break
     except Exception as e:
         continue
+from datetime import datetime
 
 
 def pi_score(y_true, y_pred):
@@ -40,6 +45,14 @@ def pi_score(y_true, y_pred):
 class BaseModel(object):
     def __init__(self, feature_to_model, item, input_shape, scaler, n_cells ,n_lags,
                        n_features):
+        # model seeding ########################################################
+        seed = hash(item+feature_to_model) & 0xffffffff
+        os.environ['PYTHONHASHSEED'] = item+feature_to_model
+        
+        np.random.seed(seed)
+        rn.seed(seed)
+        ########################################################################
+
         self.input_shape = input_shape
         self.scaler = scaler
         self.item = item
@@ -52,10 +65,10 @@ class BaseModel(object):
         # design network
         model = Sequential()
         model.add(LSTM(self.n_cells, input_shape=(self.input_shape)))
-#        model.add(Dropout(0.5))
-        model.add(Dense(1, activation=relu))
+        # model.add(Dropout(0.5))
+        model.add(Dense(1, activation="relu"))
 
-        optm = Adam(lr=lr)
+        optm = RMSprop(lr=lr)
         model.compile(loss='mse', optimizer=optm)
         return model
 
@@ -110,11 +123,17 @@ class BaseModel(object):
         rmae = sqrt(mae)
         r2 = r2_score(inv_y, inv_yhat)
         pi = pi_score(inv_y, inv_yhat)
-        print('Test RMSE: %.3f' % rmse)
-        print('Test mae:  %.3f' % mae)
-        print('Test rmae:  %.3f' % rmae)
-        print('Test r2:  %.3f' % r2)
-        print('Test pi:  %.3f' % pi)
+        report = []
+        report += ['Test RMSE: %.3f' % rmse]
+        report +=['Test mae:  %.3f' % mae]
+        report +=['Test rmae:  %.3f' % rmae]
+        report +=['Test r2:  %.3f' % r2]
+        report +=['Test pi:  %.3f' % pi]
+        report = '\r\n'.join(report)
+        print(report)
+        with open("output/models/tmp/report_%s_%s.txt" %  (self.item, self.feature_to_model),'w') as outf:
+            outf.write(report)
+        
 
         pyplot.figure()
         pyplot.plot(inv_y, color='black', label='Original data')

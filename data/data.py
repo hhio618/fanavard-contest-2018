@@ -58,8 +58,42 @@ def parser2(x):
     return datetime.datetime.strptime(x)
 
 
+def prepare_data_new(item='A', feature='f1', n_features=1, n_lags=1 ,train_perent = 0.9):
+        scaler_path = 'data/scalers/%s_%s_new.scaler' % (item, feature)
+        data_path = 'data/csv/%s_features.csv' % item
+        df = pd.read_csv(data_path, date_parser=parser,
+                         parse_dates=['date'], index_col=0)
+        # df[feature] = remove_outliers(df[feature])
+        sale_df = df[[feature]]
+        lagged_sale_df = series_to_supervised(sale_df, n_lags, 1)
+
+        if n_features > 1:
+            data = lagged_sale_df.values[:, :-(n_features-1)]
+        else:
+            data = lagged_sale_df.values
+
+        scaler = MinMaxScaler()
+        # data = scaler.fit_transform(data)
+
+        trains_size = int(data.shape[0]*train_perent)
+        d_train = data[:trains_size, :]
+        scaler = scaler.fit(d_train)
+        joblib.dump(scaler, scaler_path)
+        d_train = scaler.transform(d_train)
+        X_train = d_train[:, :-1]
+        y_train = d_train[:, -1]
+
+        d_test = data[trains_size:, :]
+        d_test = scaler.transform(d_test)
+        X_test = d_test[:, :-1]
+        y_test = d_test[:, -1]
+        X_train = X_train.reshape((X_train.shape[0], n_lags, n_features))
+        X_test = X_test.reshape((X_test.shape[0], n_lags, n_features))
+        return X_train, y_train, X_test, y_test, scaler
+
+
 def prepare_data(item='A', feature='price', n_features=1, n_lags=1 ,train_perent = 0.9):
-        scaler_path = 'data/scalers/%s.scaler' % item
+        scaler_path = 'data/scalers/%s_%s.scaler' % (item, feature)
         data_path = 'data/csv/%s_mean.csv' % item
         df = pd.read_csv(data_path, date_parser=parser,
                          parse_dates=['date'], index_col=0)
