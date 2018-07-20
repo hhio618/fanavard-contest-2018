@@ -138,6 +138,6 @@ class ComplexModel(object):
         pyplot.plot(inv_yhat, color='blue', label='Predicted data')
         pyplot.legend(loc='best')
         pyplot.title('actual and predicted for last 20% of data')
-        pyplot.xlabel('%s index' % self.feature_to_model)
-        pyplot.ylabel(self.feature_to_model)
+        pyplot.xlabel('price index')
+        pyplot.ylabel("price")
         pyplot.savefig("output/figures/%s.png" % self.item)
