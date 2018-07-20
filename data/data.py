@@ -5,19 +5,6 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.externals import joblib
 
 
-def remove_outliers(data):
-    for i in range(data.shape[0]):
-        if data[i] == 0:
-            b = i - 1
-            f = i + 1
-            while(data[b] == 0):
-                b -= 1
-            while(data[f] == 0):
-                f += 1
-            data[i] = (data[b] + data[f])/2
-    return data
-
-
 def series_to_supervised(df, n_in=1, n_out=1, dropnan=True):
     """
     Frame a time series as a supervised learning dataset.
@@ -58,69 +45,24 @@ def parser2(x):
     return datetime.datetime.strptime(x)
 
 
-def prepare_data_new(item='A', feature='f1', n_features=1, n_lags=1 ,train_perent = 0.9):
-        scaler_path = 'data/scalers/%s_%s_new.scaler' % (item, feature)
-        data_path = 'data/csv/%s_features.csv' % item
+def prepare_data_new(item='A', n_features=1, n_lags=1, train_perent=0.9):
+        data_path = 'data/csv/%s.csv' % item
         df = pd.read_csv(data_path, date_parser=parser,
                          parse_dates=['date'], index_col=0)
-        # df[feature] = remove_outliers(df[feature])
-        sale_df = df[[feature]]
-        lagged_sale_df = series_to_supervised(sale_df, n_lags, 1)
 
-        if n_features > 1:
-            data = lagged_sale_df.values[:, :-(n_features-1)]
-        else:
-            data = lagged_sale_df.values
-
-        scaler = MinMaxScaler()
-        # data = scaler.fit_transform(data)
+        data = np.array(df)
 
         trains_size = int(data.shape[0]*train_perent)
         d_train = data[:trains_size, :]
-        scaler = scaler.fit(d_train)
-        joblib.dump(scaler, scaler_path)
-        d_train = scaler.transform(d_train)
-        X_train = d_train[:, :-1]
-        y_train = d_train[:, -1]
+        # scaler = scaler.fit(d_train)
+        # joblib.dump(scaler, scaler_path)
+        # d_train = scaler.transform(d_train)
+        X_train = d_train[:, :-10]
+        y_train = d_train[:, -10:]
 
         d_test = data[trains_size:, :]
-        d_test = scaler.transform(d_test)
-        X_test = d_test[:, :-1]
-        y_test = d_test[:, -1]
-        X_train = X_train.reshape((X_train.shape[0], n_lags, n_features))
-        X_test = X_test.reshape((X_test.shape[0], n_lags, n_features))
-        return X_train, y_train, X_test, y_test, scaler
-
-
-def prepare_data(item='A', feature='price', n_features=1, n_lags=1 ,train_perent = 0.9):
-        scaler_path = 'data/scalers/%s_%s.scaler' % (item, feature)
-        data_path = 'data/csv/%s_mean.csv' % item
-        df = pd.read_csv(data_path, date_parser=parser,
-                         parse_dates=['date'], index_col=0)
-        df[feature] = remove_outliers(df[feature])
-        sale_df = df[[feature]]
-        lagged_sale_df = series_to_supervised(sale_df, n_lags, 1)
-
-        if n_features > 1:
-            data = lagged_sale_df.values[:, :-(n_features-1)]
-        else:
-            data = lagged_sale_df.values
-
-        scaler = MinMaxScaler()
-        # data = scaler.fit_transform(data)
-
-        trains_size = int(data.shape[0]*train_perent)
-        d_train = data[:trains_size, :]
-        scaler = scaler.fit(d_train)
-        joblib.dump(scaler, scaler_path)
-        d_train = scaler.transform(d_train)
-        X_train = d_train[:, :-1]
-        y_train = d_train[:, -1]
-
-        d_test = data[trains_size:, :]
-        d_test = scaler.transform(d_test)
-        X_test = d_test[:, :-1]
-        y_test = d_test[:, -1]
+        X_test = d_test[:, :-10]
+        y_test = d_test[:, -10:]
         X_train = X_train.reshape((X_train.shape[0], n_lags, n_features))
         X_test = X_test.reshape((X_test.shape[0], n_lags, n_features))
         return X_train, y_train, X_test, y_test, scaler

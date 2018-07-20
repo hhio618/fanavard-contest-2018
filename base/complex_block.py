@@ -63,11 +63,11 @@ class ComplexModel(object):
     def _build_model(self, lr):
         # design network
         model = Sequential()
-        model.add(LSTM(self.n_cells, input_shape=self.input_shape))
-        # model.add(Dropout(0.5))
-        # model.add(Dense(units=50,activation='relu'))
-        # model.add(Dropout(0.5))
-        model.add(Dense(1, activation="relu"))
+
+        model.add(LSTM(self.n_cells,activation='tanh', input_shape=self.input_shape,return_sequences=False))
+        model.add(Dropout(0.8))
+        model.add(Dense(1))
+        model.add(LeakyReLU())
 
         optm = RMSprop(lr=lr)
         model.compile(loss='mse', optimizer=optm)
@@ -99,13 +99,12 @@ class ComplexModel(object):
         pyplot.savefig("output/figures/%s_loss.png" % self.item)
 
     def predict_only(self, X_test):
-        return self.model.predict(X_test)
 
-    def predict(self, X_in, y_test):
+    def predict(self, X_test, y_test):
         # make a prediction
-        yhat = self.model.predict(X_in)
+        yhat = self.model.predict(X_test)
+
         # X_test for forecasting
-        X_test = X_in[:,:,0]
         X_test = X_test.reshape((X_test.shape[0], self.n_lags * self.n_features))
         # invert scaling for forecast
         inv_yhat = concatenate((X_test, yhat), axis=1)
