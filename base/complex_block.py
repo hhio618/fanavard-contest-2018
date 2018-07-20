@@ -110,9 +110,9 @@ class ComplexModel(object):
         yhat = self.model.predict(X_test)
 
         # # X_test for forecasting
-        inv_yhat = yhat.reshape((yhat.size(), 1))
+        inv_yhat = np.ravel(yhat)
         # invert scaling for actual
-        inv_y = y_test.reshape((y_test.size(), 1))
+        inv_y = np.ravel(y_test)
         # calculate RMSE
         rmse = sqrt(mean_squared_error(inv_y, inv_yhat))
         mae = mean_absolute_error(inv_y, inv_yhat)
