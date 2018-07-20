@@ -18,16 +18,15 @@ def run(item, n_epochs, lr):
     X_train, y_train, X_test, y_test = data.prepare_data_new(item=item,
                                                              n_lags=n_lags,
                                                              n_features=n_features)
-    print(X_train.shape)
-    print(y_train.shape)
+    Xhat = X_train[:,:50,]
 
     scaler = joblib.load("data/scalers/%s.scaler" % item)
-    model = ComplexModel(item, input_shape=X_train.shape[1:],output_size=output_size,
+    model = ComplexModel(item, input_shape=Xhat.shape[1:],output_size=output_size,
                          scaler=scaler,
                          n_cells=50,
                          n_lags=n_lags,
                          n_features=n_features)
-    model.train(X_train[:,:50,], y_train, lr=lr,
+    model.train(Xhat, y_train, lr=lr,
                 validation_split=0.2, n_epochs=n_epochs, batch_size=8)
     model.predict(X_test, y_test)
     print("Base block for prediction ready!")
