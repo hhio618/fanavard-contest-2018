@@ -19,8 +19,8 @@ def run(item, n_epochs, lr):
                                                              n_lags=n_lags,
                                                              n_features=n_features)
     n_lags = 10
-    Xhat = X_train[:400,:n_lags]
-    yhat = y_train[:400]
+    Xhat = X_train[:,:n_lags]
+    yhat = y_train
     X_t = X_test[:,:n_lags]
     y_t = y_test
 
