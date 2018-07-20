@@ -24,7 +24,7 @@ from keras import backend as K
 gui_env = ['Agg', 'TKAgg', 'GTKAgg', 'Qt4Agg', 'WXAgg']
 for gui in gui_env:
     try:
-        print "Testing matplotlib backend...", gui
+        print("Testing matplotlib backend...", gui)
         matplotlib.use(gui, warn=False, force=True)
         matplotlib.interactive(False)
         from matplotlib import pyplot
@@ -105,9 +105,8 @@ class ComplexModel(object):
         # make a prediction
         yhat = self.model.predict(X_in)
         # X_test for forecasting
-        X_test = X_in[:,0]
-        X_test = X_test.reshape(
-            (X_test.shape[0], self.n_lags * self.n_features))
+        X_test = X_in[:,:,0]
+        X_test = X_test.reshape((X_test.shape[0], self.n_lags * self.n_features))
         # invert scaling for forecast
         inv_yhat = concatenate((X_test, yhat), axis=1)
         inv_yhat = self.scaler.inverse_transform(inv_yhat)
