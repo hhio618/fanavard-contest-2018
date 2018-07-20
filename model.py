@@ -18,7 +18,7 @@ def run(item, n_epochs, lr):
     X_train, y_train, X_test, y_test = data.prepare_data_new(item=item,
                                                              n_lags=n_lags,
                                                              n_features=n_features)
-    n_lags = 5
+    n_lags = 50
     Xhat = X_train[:,:n_lags]
     yhat = y_train
     X_t = X_test[:,:n_lags]
@@ -31,6 +31,6 @@ def run(item, n_epochs, lr):
                          n_lags=n_lags,
                          n_features=n_features)
     model.train(Xhat,yhat , lr=lr,
-                validation_split=0.2, n_epochs=n_epochs, batch_size=8)
+                validation_split=0.2, n_epochs=n_epochs, batch_size=100)
     model.predict(X_t, y_t)
     print("Base block for prediction ready!")
