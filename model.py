@@ -11,16 +11,17 @@ def reshape_2d(X):
 
 def run(item, n_epochs, lr):
     # Train the price model
-    n_lags = 50
+    n_lags = 256
     n_features = 3
     output_size = 10
     print("Start traning base block for prediction...")
     X_train, y_train, X_test, y_test = data.prepare_data_new(item=item,
                                                              n_lags=n_lags,
                                                              n_features=n_features)
-    Xhat = X_train[:200,:50]
+    n_lags = 50
+    Xhat = X_train[:200,:n_lags]
     yhat = y_train[:200]
-    X_t = X_test[:,:50]
+    X_t = X_test[:,:n_lags]
     y_t = y_test
 
     scaler = joblib.load("data/scalers/%s.scaler" % item)
