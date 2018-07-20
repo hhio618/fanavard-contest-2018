@@ -2,10 +2,11 @@ from model import run
 import sys
 import keras
 import numpy as np
+from data import data
 
 
 def x_from_input():
-    x = np.asarray(sys.argv[1:])
+    x = np.asarray(sys.argv[2],sys.argv[4],sys.argv[6])
     return x
 
 
