@@ -66,13 +66,13 @@ class ComplexModel(object):
         step_size, nb_features = self.input_shape
         model = Sequential()
 
-        model.add(Conv1D(activation='relu', input_shape=(step_size, nb_features), strides=3, filters=8, kernel_size=8))
+        model.add(Conv1D(activation='relu', input_shape=(step_size, nb_features), strides=3, filters=2, kernel_size=2))
         #model.add(LeakyReLU())
         model.add(Dropout(0.5))
-        model.add(Conv1D(activation='relu', strides=2, filters=8, kernel_size=8))
+        model.add(Conv1D(activation='relu', strides=2, filters=2, kernel_size=2))
         #model.add(LeakyReLU())
         model.add(Dropout(0.5))
-        model.add(Conv1D( strides=2, filters=nb_features, kernel_size=8))
+        model.add(Conv1D( strides=2, filters=nb_features, kernel_size=2))
 
         optm = Adam(lr=lr)
         model.compile(loss='mse', optimizer=optm)
