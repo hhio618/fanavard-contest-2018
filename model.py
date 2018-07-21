@@ -31,6 +31,6 @@ def run(item, n_epochs, lr):
                          n_lags=n_lags,
                          n_features=n_features)
     model.train(Xhat,yhat , lr=lr,
-                validation_split=0.1, n_epochs=n_epochs, batch_size=100)
+                validation_split=0.2, n_epochs=n_epochs, batch_size=8)
     model.predict(X_t, y_t)
     print("Base block for prediction ready!")
