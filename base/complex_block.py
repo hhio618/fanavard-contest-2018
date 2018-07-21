@@ -3,7 +3,7 @@ import datetime
 from math import sqrt
 import numpy as np
 import pandas as pd
-from keras.layers import LSTM, Dense, Dropout,LeakyReLU,Conv1D
+from keras.layers import LSTM, Dense, Dropout,LeakyReLU
 from keras.models import Sequential
 from numpy import concatenate
 from pandas import DataFrame, concat
@@ -63,16 +63,12 @@ class ComplexModel(object):
 
     def _build_model(self, lr):
         # design network
-        step_size, nb_features = self.input_shape
         model = Sequential()
 
-        model.add(Conv1D(activation='relu', input_shape=(step_size, nb_features), strides=3, filters=2, kernel_size=2))
-        #model.add(LeakyReLU())
-        model.add(Dropout(0.5))
-        model.add(Conv1D(activation='relu', strides=2, filters=2, kernel_size=2))
-        #model.add(LeakyReLU())
-        model.add(Dropout(0.5))
-        model.add(Conv1D( strides=2, filters=nb_features, kernel_size=2))
+        model.add(LSTM(self.n_cells,activation='tanh', input_shape=self.input_shape,return_sequences=False))
+        model.add(Dropout(0.8))
+        model.add(Dense(self.output_size))
+        model.add(LeakyReLU())
 
         optm = Adam(lr=lr)
         model.compile(loss='mse', optimizer=optm)
