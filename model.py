@@ -24,6 +24,7 @@ def run(item, n_epochs, lr):
     X_t = X_test[:,:n_lags]
     y_t = y_test
 
+
     scaler = joblib.load("data/scalers/%scost.scaler" % item)
     model = ComplexModel(item, input_shape=Xhat.shape[1:],output_size=output_size,
                          scaler=scaler,
